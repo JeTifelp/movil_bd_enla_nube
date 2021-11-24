@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "487165845617",
+    "project_id": "encuesta-76b40",
+    "storage_bucket": "encuesta-76b40.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:487165845617:android:7f61dc446e3dbf8908bbd0",
+        "android_client_info": {
+          "package_name": "com.example.flutter_application_2"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "487165845617-kulk8nf79f8eabfvrpoi7kv7k60fjs09.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAPk0ARjQHaWr0XCJg_yIdRW_g8Fwlg0Sg"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "487165845617-kulk8nf79f8eabfvrpoi7kv7k60fjs09.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
