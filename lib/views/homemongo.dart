@@ -2,57 +2,80 @@ import 'dart:convert';
 
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_application_2/models/prueba.dart';
 import 'package:flutter_application_2/models/usuario.dart';
-import 'package:flutter_application_2/models/placeholder.dart';
 import 'package:flutter_application_2/providers/encuesta_provider.dart';
-import 'package:flutter_application_2/providers/placeholder_provider.dart';
-import 'package:flutter_application_2/providers/prueba_provider.dart';
 import 'package:flutter_application_2/providers/registro_provider.dart';
-import 'package:flutter_application_2/views/encuestaoption.dart';
-
-
-import 'package:http/http.dart' as http;
-
-
-
+import 'package:flutter_application_2/views/preguntasMongo.dart';
+import 'package:flutter_application_2/views/testseccion.dart';
 
 
 //  otra opcion de login
-class HomePage extends StatefulWidget {
+class HomePageMongo extends StatefulWidget {
 
 
 
   
 
   @override
-  _MyHomePageState createState() => _MyHomePageState();
+  _MyHomePageMongoState createState() => _MyHomePageMongoState();
 }
 
-class _MyHomePageState extends State<HomePage> {
+class _MyHomePageMongoState extends State<HomePageMongo> {
+
 final _emailController= TextEditingController();
 final _passworController= TextEditingController();
-int _suma = 0;
 
-final _formKey = GlobalKey<FormState>();
-
-
+//para login
 final _usuarioProvider= new UsuarioProvider();
 final String email = FirebaseAuth.instance.currentUser.email;
 final usuarioLogout= FirebaseAuth.instance.signOut();
  
- final _placeHprovider = new  PlaceholderProvider();
-  final _encuestaProv= new EncuestaProvider();
+//var
+ 
+final _encuestaProv= new EncuestaProvider();
+update(){
+  _encuestaProv.getEncuesta().then((value){
+      setState(() {
+        _encuestaProv.setPEncuestasList(value);
+      });
+
+    } );
+}
+//_______________________
+ @override
+ void initState() {
+   update();
+    // super.initState();
+    // _encuestaProv.getEncuesta().then((value){
+    //   setState(() {
+    //     _encuestaProv.setPEncuestasList(value);
+    //   });
+
+    // } );
+    
+    // _encuestaProv.listar().then((value){
+    //   setState(() {
+    // _encuestaProv.setEncuestaAllList(value);
+
+    //   });
+    // });
+    
+ }
+
+
+
   @override
   Widget build(BuildContext context) {
     
     return Scaffold(
        appBar: AppBar(
     
-        title:Text('Home Page'), //Text("HomePage"),
+        title: Text("HomePage_Mongo"),
         actions: [
           IconButton(
-            onPressed:(){}, 
+            onPressed:(){
+              update();
+            }, 
             icon: Icon(Icons.notifications)
             ),
           IconButton(
@@ -68,20 +91,20 @@ final usuarioLogout= FirebaseAuth.instance.signOut();
       //padding: EdgeInsets.all(15),
      body:Column(
                     children: [
-                      Text(' Total Encuestas : '+_placeHprovider.listPlaceHolder.length.toString()),
+                      Text(' Total Encuestas : '+_encuestaProv.listEncuestas.length.toString()),
                       Expanded(
                         
                         child: ListView.builder(
-                              itemCount:_placeHprovider.listPlaceHolder.length,//_ListPrueba.length,
+                              itemCount:_encuestaProv.listEncuestas==null ? 0: _encuestaProv.listEncuestas.length,//_ListPrueba.length,
                               itemBuilder: ( BuildContext context, int index){
                                 //return devuelve el widget que nosotros queremos ver
                                 return InkWell(//click en un card para navegar a otro widget
                                   onLongPress: (){//ontap
-                                    print(_placeHprovider.listPlaceHolder[index].id);// _ListPrueba[index].id);
+                                    print(_encuestaProv.listEncuestas[index]['sections'].toString());// _ListPrueba[index].id);
                                     //Navigator.of(context).pop();
                                       Navigator.push( context, MaterialPageRoute(
-                                          builder: (context)=> EncuestaOption(
-                                            _placeHprovider.listPlaceHolder
+                                          builder: (context)=> PreguntasMongo(
+                                            _encuestaProv.listEncuestas[index]['_id'].toString()
                                             // _placeHprovider.listPlaceHolder[index].id,
                                             // _placeHprovider.listPlaceHolder[index].title,
                                             // _placeHprovider.listPlaceHolder[index].body
@@ -109,7 +132,10 @@ final usuarioLogout= FirebaseAuth.instance.signOut();
                                   //       )
                                   //   ),
                                   // ),
-                                  child: miCard(_placeHprovider.listPlaceHolder[index].title),//_ListPrueba[index].title),
+                                  child: miCard(
+                                    _encuestaProv.listEncuestas[index]['name'].toString(),
+                                    _encuestaProv.listEncuestas[index]['description'].toString()
+                                  ),//_ListPrueba[index].title),
                                   // Text(
                                   //   _ListPrueba[index].title,
                                   //   style: TextStyle( fontSize: 16),
@@ -132,53 +158,10 @@ final usuarioLogout= FirebaseAuth.instance.signOut();
     
   }//fin BUild
   
- @override
- void initState() {
-   super.initState();
-  _placeHprovider.listar().then((value){
-     setState(() {
-   _placeHprovider.setPlaceholderList(value);
-   //_countList=_placeHprovider.listPlaceHolder.length;
-      //  _placeHprovider.setListLength(value.length);
-      //  print('longitud 1  '+_placeHprovider.getListLength().toString());
-     });
-   });
-  //  listar().then((value) {
-  //    setState(() {
-  //     _ListPrueba.addAll(value);  
-  //    });
-     
-  //  });
-   
- }
-//  Widget listarPOst() {
-//     return Container(
-//       child: ListView.builder(
-//         itemCount: _ListPrueba.length,
-//         itemBuilder: ( BuildContext context, int index){
-//           return Container(
-//             padding: EdgeInsets.all(15),
-//             decoration: BoxDecoration(
-//               border: Border(
-//                 bottom: BorderSide( color: Colors.blue, width:1
-//                 )
-//             ),
-//           ),
-//           child: Text(
-//             _ListPrueba[index].title,
-//             style: TextStyle( fontSize: 16),
-//           ),
-//           );
-//         }
-        
-//         ),
-       
-//     );
-//   }
 
 
 //______________
-Widget miCard(String titulo) {
+Widget miCard(String titulo,String description) {
   //https://andygeek.com/posts/Fundamentos%20de%20Flutter/posts/Creando-cards-en-flutter/
   return Card(
     
@@ -201,9 +184,16 @@ Widget miCard(String titulo) {
         // Usamos ListTile para ordenar la información del card como titulo, subtitulo e icono
         ListTile(
           contentPadding: EdgeInsets.fromLTRB(15, 10, 25, 0),
-          title: Text(titulo),
+          title: Text(titulo,
+                  style: TextStyle(
+                    color: Colors.black,
+                    fontSize: 25,
+                    fontWeight: FontWeight.bold
+                    ),
+          ),
           subtitle: Text(
-              'Este es el subtitulo del card. Aqui podemos colocar descripción de este card.'),
+               description
+              ),
           leading: Icon(Icons.poll,size: 80,color:Colors.red ,),
         ),
         
@@ -212,8 +202,9 @@ Widget miCard(String titulo) {
           mainAxisAlignment: MainAxisAlignment.end,
           children: <Widget>[
             FlatButton(onPressed: () { 
-                               PruebaProvider p = new PruebaProvider();
-                     p.getDataMedico();}, child: Text('Aceptar')),
+                    //            PruebaProvider p = new PruebaProvider();
+                    //  p.getDataMedico();
+                     }, child: Text('Aceptar')),
             FlatButton(onPressed: () => {}, child: Text('Cancelar'))
           ],
         )
@@ -221,6 +212,7 @@ Widget miCard(String titulo) {
     ),
   );
 }
+
  //______________ Menu ___________
 Widget drawerPage() {
   return Drawer(
@@ -290,49 +282,6 @@ Widget cuerpoDraw() {
       ),
     );
   }
-
-Widget textFormFieldEmail() {
-    return Container(
-      padding: EdgeInsets.symmetric(vertical: 20, horizontal: 20),
-      child:  TextFormField(
-             controller:_emailController,
-                          
-              validator:(value){
-                if(value.isEmpty){
-                  return 'tiene ingresar un valor';
-
-                }
-                return null;
-              },
-              decoration: InputDecoration(
-                      labelText:'Email',
-                      border: OutlineInputBorder(),
-                      hintText: 'valor1')
-
-            ),
-    );
-  }
-Widget textFormFieldPassword(){
-  return Container(
-      padding: EdgeInsets.symmetric(vertical: 20, horizontal: 20),
-    child: TextFormField(
-             controller:_passworController,
-              
-              validator:(value){
-                if(value.isEmpty){
-                  return 'tiene ingresar un valor';
-
-                }
-                return null;
-              },
-              decoration: InputDecoration(
-                      labelText:'Password',
-                      border: OutlineInputBorder(),
-                      hintText: 'valor1')
-
-            ),
-  );
-}
 
   void showToast(BuildContext context, String mensaje) {
     ScaffoldMessenger.of(context).showSnackBar(SnackBar(

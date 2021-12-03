@@ -1,14 +1,20 @@
 //import 'package:flutter_application_2/Constant/routes.dart';
 
 
+
+
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_application_2/views/homemongo.dart';
+
+import 'package:flutter_application_2/views/test.dart';
 //import 'package:firebase_auth/firebase_auth.dart';
 import 'views/home.dart';
-import 'views/signin.dart';
+
 import 'views/signup.dart';
-//import 'views/login_view';
-import 'views/home copy.dart';
+import 'views/signin2.dart';
+import 'views/test.dart';
+
 
 
 void main() async{
@@ -21,21 +27,27 @@ void main() async{
 class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
+
   return MaterialApp(
-    title: 'flutter-Sqlite',
+    title: 'Encuestas',
+    debugShowCheckedModeBanner: false,
     theme: ThemeData(
         
-        primarySwatch: Colors.yellow,
+        primarySwatch: Colors.orange,
       ),
       routes:{
            '/register':( context)=> SignUp(),
-            '/login':( context)=> SignIn(),
+            //'/login':( context)=> SignIn(),
             '/home':( context)=> HomePage(),
-            '/inicio': ( context)=> Login()
+            '/inicio': ( context)=> Login(),
+
+            //'/test':( context )=> Test(),
+            '/homemongo':( context )=> HomePageMongo()
             
 
       },
       initialRoute: '/inicio',
+      //initialRoute: '/inicio',
   );
   
   }
@@ -44,3 +56,6 @@ class MyApp extends StatelessWidget {
 }
 
 
+
+//https://encuestas-rest-api-server2.herokuapp.com
+//https://us02web.zoom.us/j/81371487044?pwd=ekxsZ1pBaldqQmFjaWdHc01CQUxsZz09

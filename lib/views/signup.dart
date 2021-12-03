@@ -7,7 +7,9 @@ import 'package:flutter_application_2/models/cuenta.dart';
 import 'package:flutter_application_2/models/usuario.dart';
 import 'package:flutter_application_2/providers/registro_provider.dart';
 import 'package:flutter_application_2/service/auth_service.dart';
-import 'package:flutter_application_2/views/home%20copy.dart';
+//import 'package:flutter_application_2/views/home%20copy.dart';
+import 'package:flutter_application_2/views/encuestaoption.dart';
+import 'package:flutter_application_2/views/signin2.dart';
 
 
 
